@@ -50,8 +50,12 @@ public:
     // Complex tokens.
     INT,
     STRING,
+    INTVAL,
     IDENT,
     END,
+    //MUL,
+    //DIV,
+    //MOD,
   };
 
 public:
@@ -86,7 +90,12 @@ public:
     assert(Is(Kind::STRING) && "not an identifier");
     return *value_.StringValue;
   }
-
+  /// Return the int value.
+  uint64_t GetIntVal() const
+  {
+    assert(Is(Kind::INTVAL) && "not an identifier");
+    return value_.IntValue;
+  }
   /// Copy operator.
   Token &operator=(const Token &that);
 
@@ -106,6 +115,10 @@ public:
   static Token While(const Location &l) { return Token(l, Kind::WHILE); }
   static Token Ident(const Location &l, const std::string &str);
   static Token String(const Location &l, const std::string &str);
+  static Token Int(const Location &l, uint64_t n);
+  //static Token Mul(const Location &l) { return Token(l, Kind::MUL);
+  //static Token Div(const Location &l) { return Token(l, Kind::DIV);
+  //static Token Mod(const Location &l) { return Token(l, Kind::MOD);
 
   /// Print the token to a stream.
   void Print(std::ostream &os) const;
@@ -164,6 +177,7 @@ private:
   Location GetLocation() const { return { name_, lineNo_, charNo_ }; }
   /// Report an error.
   [[noreturn]] void Error(const std::string &msg);
+  
 
 private:
   /// Current file name.

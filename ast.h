@@ -42,6 +42,7 @@ private:
 class Expr : public Node {
 public:
   enum class Kind {
+    INTVAL,
     REF,
     BINARY,
     CALL,
@@ -82,7 +83,7 @@ class BinaryExpr : public Expr {
 public:
   /// Enumeration of binary operators.
   enum class Kind {
-    ADD
+    ADD,
   };
 
 public:
@@ -133,6 +134,22 @@ private:
   std::shared_ptr<Expr> callee_;
   ArgList args_;
 };
+
+class IntExpr : public Expr {
+public:
+  IntExpr(const uint64_t value)
+    : Expr(Kind::INTVAL)
+    , value_(value)
+  {
+  }
+
+ uint64_t GetValue() const { return value_; }
+
+private:
+  /// Name of the identifier.
+  uint64_t value_;
+};
+
 
 /**
  * Block statement composed of a sequence of statements.
